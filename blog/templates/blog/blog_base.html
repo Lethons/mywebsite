@@ -1,0 +1,56 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lethons' BLog</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/blog.css' %}">
+    <link rel="shortcut icon" href="{% static 'media/favicon.png' %}">
+</head>
+<body>
+    {#  导航栏  #}
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <ul class="nav nav-pills">
+                <li role="presentation"><a href="{% url 'index' %}">Home</a></li>
+                <li role="presentation"><a href="{% url 'blog_home' %}">Blog</a></li>
+                <li role="presentation"><a href="#">Messages</a></li>
+                <li role="presentation"><a href="#">AboutMe</a></li>
+                <li role="presentation"><a href="#">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    {#  博客主体部分  #}
+    <div class="blog container-fluid">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-1">
+                <div class="panel panel-default ">
+                    <div class="panel-heading">
+                        <h2 class="panel-title"><a href="{% url 'blog_home' %}">博客</a>{% block panel_title %}{% endblock %}</h2>
+                    </div>
+                    <div class="panel-body">
+                        {% block panel_body %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        {# 侧边栏 #}
+            <div class="col-md-2">
+                <div class="panel panel-default ">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">{% block sidebar_title %}{% endblock %}</h2>
+                    </div>
+                    <div class="panel-body">
+                        {% block sidebar_body %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'blog/js/blog.js' %}"></script>
+    {% block my_jsscript %}{% endblock %}
+</body>
+</html>

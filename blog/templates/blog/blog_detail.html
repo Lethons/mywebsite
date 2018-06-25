@@ -1,0 +1,36 @@
+{% extends 'blog/blog_base.html' %}
+
+{% block panel_title %}
+    |{{ blog.title }}
+{% endblock %}
+
+{% block panel_body %}
+    <div class="blog-detail">
+        <h3 class="text-center">{{ blog.title }}</h3>
+        <span class="glyphicon glyphicon-user" aria-hidden="true">{{ blog.author }}</span>&nbsp;&nbsp;
+        <span class="glyphicon glyphicon-tag" aria-hidden="true"><a href="{% url 'blog_tag' blog.tag %}">{{ blog.tag }}</a></span>&nbsp;&nbsp;
+        <span class="glyphicon glyphicon-time" aria-hidden="true">{{ blog.publish_time }}</span>
+        <div class="blog-content">{{ blog.content|safe }}</div>
+    </div>
+    {# 博客上下篇 #}
+    <div class="next-previous">
+        <h5>
+            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true">上一篇：
+                {% if pre_blog %}
+                    <a href="{% url 'blog_detail' pre_blog.pk %}">{{ pre_blog.title }}</a>
+                {% else %}
+                    None
+                {% endif %}
+            </span>
+        </h5>
+        <h5>
+            <span class="glyphicon glyphicon-arrow-down" aria-hidden="true">下一篇：
+                {% if next_blog %}
+                    <a href="{% url 'blog_detail' next_blog.pk %}">{{ next_blog.title }}</a>
+                {% else %}
+                    None
+                {% endif %}
+            </span>
+        </h5>
+    </div>
+{% endblock %}

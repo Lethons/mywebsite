@@ -2,4 +2,4 @@
 
 - Use python Django
 
-测试
+- Test pycharm git

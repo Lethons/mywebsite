@@ -6,7 +6,7 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <h4><a href="{% url 'blog_detail' blog.pk%}">{{ blog.title }}</a></h4>
-                <p>{{ blog.content|striptags|truncatechars:100 }}</p>  {# 显示博客内容前100字 #}
+                <p>{{ blog.content|striptags|truncatechars:100|safe }}</p>  {# 显示博客内容前100字 #}
                 <div class="row">
                     <div class="col-md-2">
                         <span class="glyphicon glyphicon-user" aria-hidden="true">{{ blog.author }}</span>

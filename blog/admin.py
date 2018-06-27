@@ -5,6 +5,7 @@ from .models import Tag, Blog
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'tag', 'publish_time', 'update_time')
+    fields = ('title', 'content', 'publish_time', 'author', 'tag')
     list_per_page = 20
     list_filter = ('tag',)
 

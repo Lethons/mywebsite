@@ -10,11 +10,12 @@ def blog_home(request):
     tags = Tag.objects.all()
     # 获取get请求，如果没有默认为1
     current_page = request.GET.get('page', 1)
-    pages = Paginator(blogs, 2)  # 8个博客一页
+    pages = Paginator(blogs, 8)  # 8个博客一页
     blogs = pages.page(current_page)  # 获取当前页的博客
     ctx['blogs'] = blogs
     ctx['tags'] = tags
     ctx['pages'] = pages
+    ctx['blog_dates'] = Blog.objects.dates('publish_time', 'month', order='DESC')
     return render_to_response('blog/blog_home.html', ctx)
 
 
@@ -32,6 +33,24 @@ def blog_tag(request, blog_tag):
     ctx['tags'] = tags
     ctx['pages'] = pages
     return render_to_response('blog/blog_tag.html', ctx)
+
+
+def blog_date(request, year, month):
+    """ 按日期分类 """
+    ctx = {}
+    blogs = Blog.objects.filter(publish_time__year=year, publish_time__month=month)
+    tags = Tag.objects.all()
+    # 获取get请求，如果没有默认为1
+    current_page = request.GET.get('page', 1)
+    pages = Paginator(blogs, 8)  # 8个博客一页
+    blogs = pages.page(current_page)  # 获取当前页的博客
+    ctx['blogs'] = blogs
+    ctx['tags'] = tags
+    ctx['pages'] = pages
+    ctx['blog_dates'] = Blog.objects.dates('publish_time', 'month', order='DESC')
+    ctx['year'] = year
+    ctx['month'] = month
+    return render_to_response('blog/blog_date.html', ctx)
 
 
 def blog_detail(request, blog_pk):

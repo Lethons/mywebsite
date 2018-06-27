@@ -35,14 +35,25 @@
                     </div>
                 </div>
             </div>
-        {# 侧边栏 #}
+        {# 侧边栏1 #}
             <div class="col-md-2">
                 <div class="panel panel-default ">
                     <div class="panel-heading">
-                        <h2 class="panel-title">{% block sidebar_title %}{% endblock %}</h2>
+                        <h2 class="panel-title">{% block sidebar1_title %}{% endblock %}</h2>
                     </div>
                     <div class="panel-body">
-                        {% block sidebar_body %}{% endblock %}
+                        {% block sidebar1_body %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        {# 侧边栏2 #}
+            <div class="col-md-2">
+                <div class="panel panel-default ">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">{% block sidebar2_title %}{% endblock %}</h2>
+                    </div>
+                    <div class="panel-body">
+                        {% block sidebar2_body %}{% endblock %}
                     </div>
                 </div>
             </div>

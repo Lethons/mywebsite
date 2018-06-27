@@ -62,14 +62,25 @@
     </nav>
 {% endblock %}
 
-{% block sidebar_title %}
-    Blog Tag
+{% block sidebar1_title %}
+    博客标签
 {% endblock %}
 
-{% block sidebar_body %}
+{% block sidebar1_body %}
     {% for tag in tags %}
         <h5><span class="glyphicon glyphicon-tags" aria-hidden="true"></span>&nbsp;&nbsp;<a href="{% url 'blog_tag' tag %}">{{ tag }}</a></h5>
     {% endfor %}
+{% endblock %}
+
+{% block sidebar2_title %}
+    归档日期
+{% endblock %}
+
+{% block sidebar2_body %}
+    {% for blog_date in blog_dates %}
+        <h5><a href="{% url 'blog_date' blog_date.year blog_date.month %}">{{ blog_date|date:"Y年m月" }}</a></h5>
+    {% endfor %}
+
 {% endblock %}
 
 {% block my_jsscript %}

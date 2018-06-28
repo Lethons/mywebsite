@@ -32,6 +32,7 @@ def blog_tag(request, blog_tag):
     ctx['blog_tag'] = tag
     ctx['tags'] = tags
     ctx['pages'] = pages
+    ctx['blog_dates'] = Blog.objects.dates('publish_time', 'month', order='DESC')
     return render_to_response('blog/blog_tag.html', ctx)
 
 
@@ -57,18 +58,21 @@ def blog_detail(request, blog_pk):
     """ blog detail """
     ctx = {}
     blog = get_object_or_404(Blog, pk=blog_pk)
+    tags = Tag.objects.all()
     # get blog's next or previous blog
-    pre_blog = Blog.objects.filter(pk__gt=blog.pk).order_by('pk')
+    pre_blog = Blog.objects.filter(publish_time__lt=blog.publish_time)
     if pre_blog .count() > 0:
         pre_blog = pre_blog[0]
     else:
         pre_blog = None
-    next_blog = Blog.objects.filter(pk__lt=blog.pk).order_by('-pk')
+    next_blog = Blog.objects.filter(publish_time__gt=blog.publish_time)
     if next_blog .count() > 0:
         next_blog = next_blog[0]
     else:
         next_blog = None
     ctx['blog'] = blog
+    ctx['tags'] = tags
     ctx['pre_blog'] = pre_blog
     ctx['next_blog'] = next_blog
+    ctx['blog_dates'] = Blog.objects.dates('publish_time', 'month', order='DESC')
     return render_to_response('blog/blog_detail.html', ctx)

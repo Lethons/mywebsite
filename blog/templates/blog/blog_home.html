@@ -80,7 +80,6 @@
     {% for blog_date in blog_dates %}
         <h5><a href="{% url 'blog_date' blog_date.year blog_date.month %}">{{ blog_date|date:"Y年m月" }}</a></h5>
     {% endfor %}
-
 {% endblock %}
 
 {% block my_jsscript %}

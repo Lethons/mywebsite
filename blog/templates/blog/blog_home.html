@@ -37,8 +37,16 @@
                             </a>
                         {% endif %}
                     </li>
-                    {% for page in pages.page_range %}
-                        <li><a href="?page={{ page }}">{{ page }}</a></li>
+                    {% for page in page_range %}
+                        {% if blogs.number == page %}
+                            <li class="active"><span>{{ page }}</span></li>
+                        {% else %}
+                            {% if page == '...' %}
+                                <li><span>{{ page }}</span></li>
+                            {% else %}
+                                <li><a href="?page={{ page }}">{{ page }}</a></li>
+                            {% endif %}
+                        {% endif %}
                     {% endfor %}
                     <li>
                         {% if blogs.has_next %}
@@ -82,8 +90,8 @@
     {% endfor %}
 {% endblock %}
 
-{% block my_jsscript %}
-    <script type="text/javascript">
-        $(".pagination li:eq({{blogs.number}})").addClass("active");
-    </script>
-{% endblock %}
+{#{% block my_jsscript %}#}
+{#    <script type="text/javascript">#}
+{#        $(".pagination li:eq({{blogs.number}})").addClass("active");#}
+{#    </script>#}
+{#{% endblock %}#}

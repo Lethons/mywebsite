@@ -2,55 +2,67 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.core.paginator import Paginator
 from .models import Blog, Tag
 
-# Create your views here.
-def blog_home(request):
-    """ all blog list """
+
+def comment_code(req, blogs):
     ctx = {}
-    blogs = Blog.objects.all()
     tags = Tag.objects.all()
     # 获取get请求，如果没有默认为1
-    current_page = request.GET.get('page', 1)
-    pages = Paginator(blogs, 8)  # 8个博客一页
-    blogs = pages.page(current_page)  # 获取当前页的博客
+    page_num = req.GET.get('page', 1)
+    pages = Paginator(blogs, 6)  # 8个博客一页
+    if int(page_num) > pages.num_pages:
+        error404 = True
+        page_num = 1
+    else:
+        error404 = False
+    blogs = pages.page(page_num)  # 获取当前页的博客
+    current_page_num = blogs.number  # 获取当前页码
+    page_range = list(range(max(current_page_num-2, 1), min(current_page_num+2, pages.num_pages)+1))
+    if page_range[0] >= 2:
+        page_range.insert(0, 1)
+        if page_range[1] > 2:
+            page_range.insert(1, '...')
+    if page_range[-1] <= pages.num_pages-1:
+        page_range.append(pages.num_pages)
+        if page_range[-2] < pages.num_pages-1:
+            page_range.insert(-1, '...')
+
     ctx['blogs'] = blogs
     ctx['tags'] = tags
     ctx['pages'] = pages
+    ctx['page_range'] = page_range
     ctx['blog_dates'] = Blog.objects.dates('publish_time', 'month', order='DESC')
+    return ctx, error404
+
+
+# Create your views here.
+def blog_home(request):
+    """ all blog list """
+    blogs = Blog.objects.all()
+    ctx, error404 = comment_code(request, blogs)
+    if error404:
+        return render_to_response('blog/error404.html')
     return render_to_response('blog/blog_home.html', ctx)
 
 
 def blog_tag(request, blog_tag):
     """ same tag blog list """
-    ctx = {}
     tag = get_object_or_404(Tag, tag=blog_tag)
     blogs = Blog.objects.filter(tag=tag)
-    tags = Tag.objects.all()
-    current_page = request.GET.get('page', 1)
-    pages = Paginator(blogs, 2)
-    blogs = pages.page(current_page)
-    ctx['blogs'] = blogs
+    ctx, error404 = comment_code(request, blogs)
     ctx['blog_tag'] = tag
-    ctx['tags'] = tags
-    ctx['pages'] = pages
-    ctx['blog_dates'] = Blog.objects.dates('publish_time', 'month', order='DESC')
+    if error404:
+        return render_to_response('blog/error404.html')
     return render_to_response('blog/blog_tag.html', ctx)
 
 
 def blog_date(request, year, month):
     """ 按日期分类 """
-    ctx = {}
     blogs = Blog.objects.filter(publish_time__year=year, publish_time__month=month)
-    tags = Tag.objects.all()
-    # 获取get请求，如果没有默认为1
-    current_page = request.GET.get('page', 1)
-    pages = Paginator(blogs, 8)  # 8个博客一页
-    blogs = pages.page(current_page)  # 获取当前页的博客
-    ctx['blogs'] = blogs
-    ctx['tags'] = tags
-    ctx['pages'] = pages
-    ctx['blog_dates'] = Blog.objects.dates('publish_time', 'month', order='DESC')
+    ctx, error404 = comment_code(request, blogs)
     ctx['year'] = year
     ctx['month'] = month
+    if error404:
+        return render_to_response('blog/error404.html')
     return render_to_response('blog/blog_date.html', ctx)
 
 
